@@ -39,19 +39,12 @@ function Input() {
       if (expirationDate < currDate) {
         alert("Expiration date cannot be before the current date");
       } else {
-        // Calculate the difference in days, using Math.ceil to always round up
-        const msDay = 1000 * 60 * 60 * 24;
-        let diffInMs = expirationDate - currDate;
-        let diffInDays = Math.ceil(diffInMs / msDay);
-        if (diffInDays == 0){
-          diffInDays = 1
-        }
-        // Add the item to the foodDateDict
+        // Add the item to the foodDateDict with expirationDate as a string
         setFoodDateDict(d => [
           ...d,
           {
             food: foodName,
-            daysToExpiration: diffInDays
+            expirationDate: date // Store the expiration date as a string
           }
         ]);
 
@@ -63,6 +56,20 @@ function Input() {
       alert("One or more entries is missing!");
     }
   }
+
+  // Function to calculate days to expiration dynamically
+  const calculateDaysToExpiration = (expirationDate) => {
+    let currDate = new Date();
+    let expDate = new Date(expirationDate);
+
+    // Normalize both dates to midnight
+    currDate.setHours(0, 0, 0, 0);
+    expDate.setHours(0, 0, 0, 0);
+
+    const msDay = 1000 * 60 * 60 * 24;
+    let diffInMs = expDate - currDate;
+    return Math.ceil(diffInMs / msDay);
+  };
 
   // Function to handle deletion of a specific card
   function handleDelete(index) {
@@ -110,37 +117,44 @@ function Input() {
       </div>
       <div className="food-card-container">
         <ol>
-          {foodDateDict.map((pair, index) => (
-            <li
-              key={index}
-              style={getBackgroundStyle(pair.daysToExpiration)} // Apply conditional background style
-              className="food-card"
-            >
-              🛒 {pair.food}
-              <span>{pair.daysToExpiration === 1 ? pair.daysToExpiration + " day left" : pair.daysToExpiration + " days left"}</span>
-              <span className="delete-icon" onClick={() => handleDelete(index)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="icon icon-tabler icons-tabler-outline icon-tabler-trash"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M4 7l16 0" />
-                  <path d="M10 11l0 6" />
-                  <path d="M14 11l0 6" />
-                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                </svg>
-              </span>
-            </li>
-          ))}
+          {foodDateDict.map((pair, index) => {
+            const daysToExpiration = calculateDaysToExpiration(pair.expirationDate); // Calculate dynamically
+            return (
+              <li
+                key={index}
+                style={getBackgroundStyle(daysToExpiration)} // Apply conditional background style
+                className="food-card"
+              >
+                🛒 {pair.food}
+                <span>
+                  {daysToExpiration === 1
+                    ? `${daysToExpiration} day left`
+                    : `${daysToExpiration} days left`}
+                </span>
+                <span className="delete-icon" onClick={() => handleDelete(index)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="icon icon-tabler icons-tabler-outline icon-tabler-trash"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 7l16 0" />
+                    <path d="M10 11l0 6" />
+                    <path d="M14 11l0 6" />
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                  </svg>
+                </span>
+              </li>
+            );
+          })}
         </ol>
       </div>
     </>
