@@ -1,0 +1,50 @@
+.food-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 10px auto;
+    color: #333; /* Ensure the text color is dark */
+}
+
+.food-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #d3d3d3;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-align: center;
+    color: #333; /* Dark color for readability */
+}
+
+.info-bubble {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: #333; /* Set a default dark color */
+    text-align: center;
+}
+
+.cooked {
+    background-color: wheat;
+}
+
+.expires {
+    background-color: #a78bfa;
+    color: white; /* White text for contrast on purple */
+}
+
+.delete-button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    background-color: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
